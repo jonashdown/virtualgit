@@ -1,0 +1,30 @@
+{
+  "name": "virtualgit",
+  "version": "0.0.0",
+  "description": "Virtual Reality Git thing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saralk/virtualgit.git"
+  },
+  "keywords": [
+    "VR",
+    "virtual",
+    "reality",
+    "kanban"
+  ],
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/saralk/virtualgit/issues"
+  },
+  "homepage": "https://github.com/saralk/virtualgit#readme",
+  "dependencies": {
+    "@octokit/rest": "^15.9.6",
+    "express": "^4.16.3"
+  }
+}
