@@ -42,8 +42,8 @@ app.get('/', (req, res) => {
 app.use('/images', express.static(__dirname + '/public/images'));
 app.use('/src', express.static(__dirname + '/public/src'));
 
-app.get('/project/:id', (req,res) => {
-  let project_id = req.params.id
+app.get('/project/:project_id', (req,res) => {
+  let { project_id } = req.params;
   gitClient.projects.getProject({project_id})
   .then((result) => {
     console.log(`GET project/${project_id}`);
@@ -55,8 +55,8 @@ app.get('/project/:id', (req,res) => {
   });
 });
 
-app.get('/project/:id/columns' ,(req,res) => {
-  let project_id = req.params.id
+app.get('/project/:project_id/columns' ,(req,res) => {
+  let { project_id } = req.params;
   gitClient.projects.getProjectColumns({project_id})
   .then((result) => {
     console.log(`GET project/${project_id}/columns`);
@@ -68,8 +68,8 @@ app.get('/project/:id/columns' ,(req,res) => {
   })
 });
 
-app.get('/column/:id', (req,res) => {
-  let column_id = req.params.id
+app.get('/column/:column_id', (req,res) => {
+  let { column_id } = req.params;
   gitClient.projects.getProjectColumn({column_id})
   .then((result) => {
     console.log(`GET column/${column_id}`);
@@ -81,8 +81,8 @@ app.get('/column/:id', (req,res) => {
   })
 });
 
-app.get('/column/:id/cards', (req,res) => {
-  let column_id = req.params.id
+app.get('/column/:column_id/cards', (req,res) => {
+  let { column_id } = req.params;
   gitClient.projects.getProjectCards({column_id, archived_state: 'all'})
   .then((result) => {
     console.log(`GET column/${column_id}/cards`);
@@ -94,8 +94,8 @@ app.get('/column/:id/cards', (req,res) => {
   })
 });
 
-app.get('/card/:id', (req,res) => {
-  let card_id = req.params.id
+app.get('/card/:card_id', (req,res) => {
+  let { card_id } = req.params;
   gitClient.projects.getProjectCard({card_id})
   .then((result) => {
     console.log(`GET column/${card_id}/cards`);
