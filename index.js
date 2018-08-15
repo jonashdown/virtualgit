@@ -1,5 +1,5 @@
-const app = require ('express')();
 const express = require('express');
+const app = express();
 const gitClient = require ('@octokit/rest')();
 
 gitClient.authenticate({
