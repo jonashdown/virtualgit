@@ -52,6 +52,58 @@ app.get('/project/:id', (req,res) => {
   .catch((error) => {
     console.error(error);
     res.status(error.code).send(error);
+  });
+});
+
+app.get('/project/:id/columns' ,(req,res) => {
+  let project_id = req.params.id
+  gitClient.projects.getProjectColumns({project_id})
+  .then((result) => {
+    console.log(`GET project/${project_id}/columns`);
+    res.json({columns: result.data})
+  })
+  .catch((error) => {
+    console.error(error);
+    res.status(error.code).send(error);
+  })
+});
+
+app.get('/column/:id', (req,res) => {
+  let column_id = req.params.id
+  gitClient.projects.getProjectColumn({column_id})
+  .then((result) => {
+    console.log(`GET column/${column_id}`);
+    res.json({column: result.data})
+  })
+  .catch((error) => {
+    console.error(error);
+    res.status(error.code).send(error);
+  })
+});
+
+app.get('/column/:id/cards', (req,res) => {
+  let column_id = req.params.id
+  gitClient.projects.getProjectCards({column_id, archived_state: 'all'})
+  .then((result) => {
+    console.log(`GET column/${column_id}/cards`);
+    res.json({cards: result.data});
+  })
+  .catch((error) => {
+    console.error(error);
+    res.status(error.code).send(error);
+  })
+});
+
+app.get('/card/:id', (req,res) => {
+  let card_id = req.params.id
+  gitClient.projects.getProjectCard({card_id})
+  .then((result) => {
+    console.log(`GET column/${card_id}/cards`);
+    res.json({card: result.data});
+  })
+  .catch((error) => {
+    console.error(error);
+    res.status(error.code).send(error);
   })
 });
 
