@@ -46,25 +46,22 @@ class Room {
         //sofa.setAttribute('rotation', '0 180 0');
         //this.scene.appendChild(sofa);
 
-        this.addProjectBoard(123);
-        this.addTicketToProject(123, 'test', 0);
-        this.addTicketToProject(123, 'test2', 0);
-        this.addTicketToProject(123, 'test2', 0);
-        this.addTicketToProject(123, 'test2', 0);
-        this.addTicketToProject(123, 'test2', 0);
-        this.addTicketToProject(123, 'test3', 1);
-        this.addTicketToProject(123, 'test3', 1);
-        this.addTicketToProject(123, 'test3', 1);
-        this.addTicketToProject(123, 'test3', 1);
-        this.addTicketToProject(123, 'test4', 2);
-        this.addTicketToProject(123, 'test5', 2);
-        this.addTicketToProject(123, 'test6', 2);
-        this.addTicketToProject(123, 'test6', 2);
-        this.addTicketToProject(123, 'test6', 2);
-        this.addTicketToProject(123, 'test7', 2);
-        this.addColumnToProject(123, 'TEST COL');
-        this.addColumnToProject(123, 'TEST COL1');
-        this.addColumnToProject(123, 'TEST COL2');
+        this.addProjectBoard(1);
+        //this.addTicketToProject(1, 'test', 0);
+        //this.addTicketToProject(1, 'test2', 0);
+        //this.addTicketToProject(1, 'test2', 0);
+        //this.addTicketToProject(1, 'test2', 0);
+        //this.addTicketToProject(1, 'test2', 0);
+        //this.addTicketToProject(1, 'test3', 1);
+        //this.addTicketToProject(1, 'test3', 1);
+        //this.addTicketToProject(1, 'test3', 1);
+        //this.addTicketToProject(1, 'test3', 1);
+        //this.addTicketToProject(1, 'test4', 2);
+        //this.addTicketToProject(1, 'test5', 2);
+        //this.addTicketToProject(1, 'test6', 2);
+        //this.addTicketToProject(1, 'test6', 2);
+        //this.addTicketToProject(1, 'test6', 2);
+        //this.addTicketToProject(1, 'test7', 2);
     }
 
     addWall(position, rotation) {
@@ -197,22 +194,35 @@ class Room {
 
 }
 
-function renderProjectBoard (data) {
-    console.log(data);
+function renderProjectBoard (room, data) {
+    data.columns.forEach((col) => {
+        room.addColumnToProject(1, col.name);
+        request(window.location + 'column/' + col.id + '/cards', (err, res, body) => {
+            JSON.parse(body).cards.forEach((card, i) => {
+                let issue = card.content_url.split('/');
+                let issue_id = issue[issue.length-1];
+
+                request(window.location + 'issue/' + issue_id, function(err, res, body) {
+                    let b = JSON.parse(body);
+                    console.log(b);
+                    room.addTicketToProject(1, b.issue.title, i);
+                });
+            });
+        });
+    });
 }; 
 
-function getProjectBoard () {
-    request('http://localhost:3000/project/1712999', function (error, response, body) {
+function getProjectBoard (room) {
+    request(window.location + 'project/1712999/columns', function (error, response, body) {
         if (error) {
             console.error(error);
         }
         else {
-            renderProjectBoard(body);
-            console.log(response);
+            renderProjectBoard(room, JSON.parse(body));
         }
     });
 };
 
 const room = new Room();
 document.body.appendChild(room.getScene());
-getProjectBoard();
+getProjectBoard(room);
