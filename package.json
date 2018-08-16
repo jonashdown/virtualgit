@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "prestart": "browserify clientsrc/client.js > public/src/client.js"
+    "prestart": "mkdir -p public/src && browserify clientsrc/client.js > public/src/client.js"
   },
   "repository": {
     "type": "git",
