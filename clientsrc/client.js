@@ -1,3 +1,5 @@
+var request = require ('request');
+
 class Room {
     constructor() {
         this.walls = [];
@@ -137,5 +139,22 @@ class Room {
 
 }
 
+function renderProjectBoard (data) {
+    console.log(data);
+}; 
+
+function getProjectBoard () {
+    request('http://localhost:3000/project/1712999', function (error, response, body) {
+        if (error) {
+            console.error(error);
+        }
+        else {
+            renderProjectBoard(body);
+            console.log(response);
+        }
+    });
+};
+
 const room = new Room();
 document.body.appendChild(room.getScene());
+getProjectBoard();
