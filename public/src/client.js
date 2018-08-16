@@ -8,6 +8,12 @@ class Room {
         this.addImage('images/wood.jpg', 'wood');
         this.addImage('images/wallpaper.jpg', 'wallpaper');
         this.addModel('images/whiteboard/scene.gltf', 'whiteboard');
+        this.addModel('images/sofa/scene.gltf', 'sofa');
+        
+        this.camera = document.createElement('a-entity');
+        this.camera.setAttribute('position', '0 4 15');
+        this.camera.appendChild(document.createElement('a-camera'));
+        this.scene.appendChild(this.camera);
         
         const sky = document.createElement('a-sky');
         sky.setAttribute('color', '#666');
@@ -57,7 +63,7 @@ class Room {
         this.scene.appendChild(wall4);
 
         const plane = document.createElement('a-plane');
-        plane.setAttribute('position', '0 0 -4');
+        plane.setAttribute('position', '0 -5.5 -4');
         plane.setAttribute('rotation', '-90 0 0');
         plane.setAttribute('width', '50');
         plane.setAttribute('height', '50');
@@ -67,9 +73,15 @@ class Room {
         this.scene.appendChild(plane);
 
         const whiteboard = document.createElement('a-entity');
-        whiteboard.setAttribute('gltf-model', '#whiteboard');
+        whiteboard.setAttribute('gltf-model', 'url(images/whiteboard/scene.gltf)');
         this.scene.appendChild(whiteboard);
 
+        const sofa = document.createElement('a-entity');
+        sofa.setAttribute('gltf-model', 'url(images/sofa/scene.gltf)');
+        sofa.setAttribute('scale', '0.007 0.007 0.007');
+        sofa.setAttribute('position', '15.7 -5.5 -33');
+        sofa.setAttribute('rotation', '0 180 0');
+        this.scene.appendChild(sofa);
     }
 
     getScene() {
