@@ -116,9 +116,6 @@ app.get('/issue/:issue_id', (req, res) => {
     }).then((result) => {
         res.json({issue: result.data});
     });
-    //gitClient.issues.get({'owner': 'saralk', 'repo': 'virtualgit', 'number': issue_id}).then(result) => {
-    //    res.json({issue: result.data});
-    //});
 });
 
 app.listen(3000);

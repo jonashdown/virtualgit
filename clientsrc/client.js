@@ -12,8 +12,10 @@ class Room {
 
         this.addImage('images/wood.jpg', 'wood');
         this.addImage('images/wallpaper.jpg', 'wallpaper');
+        this.addImage('images/x.svg', 'x');
         this.addModel('images/whiteboard/scene.gltf', 'whiteboard');
         this.addModel('images/sofa/scene.gltf', 'sofa');
+        this.addModel('images/plantpot/scene.gltf', 'plantpot');
         
         this.camera = document.createElement('a-entity');
         this.camera.setAttribute('position', '0 -4 -4');
@@ -38,30 +40,14 @@ class Room {
         plane.setAttribute('src', '#wood');
         plane.setAttribute('repeat', '20 20');
         this.scene.appendChild(plane);
-
-        //const sofa = document.createElement('a-entity');
-        //sofa.setAttribute('gltf-model', 'url(images/sofa/scene.gltf)');
-        //sofa.setAttribute('scale', '0.007 0.007 0.007');
-        //sofa.setAttribute('position', '15.7 -5.5 -33');
-        //sofa.setAttribute('rotation', '0 180 0');
-        //this.scene.appendChild(sofa);
+        
+        const plantpot = document.createElement('a-entity');
+        plantpot.setAttribute('gltf-model', 'url(images/plantpot/scene.gltf)');
+        plantpot.setAttribute('scale', '0.25 0.25 0.25');
+        plantpot.setAttribute('position', '-2.58 -5.49 -6.33'); 
+        this.scene.appendChild(plantpot);
 
         this.addProjectBoard(1);
-        //this.addTicketToProject(1, 'test', 0);
-        //this.addTicketToProject(1, 'test2', 0);
-        //this.addTicketToProject(1, 'test2', 0);
-        //this.addTicketToProject(1, 'test2', 0);
-        //this.addTicketToProject(1, 'test2', 0);
-        //this.addTicketToProject(1, 'test3', 1);
-        //this.addTicketToProject(1, 'test3', 1);
-        //this.addTicketToProject(1, 'test3', 1);
-        //this.addTicketToProject(1, 'test3', 1);
-        //this.addTicketToProject(1, 'test4', 2);
-        //this.addTicketToProject(1, 'test5', 2);
-        //this.addTicketToProject(1, 'test6', 2);
-        //this.addTicketToProject(1, 'test6', 2);
-        //this.addTicketToProject(1, 'test6', 2);
-        //this.addTicketToProject(1, 'test7', 2);
     }
 
     addWall(position, rotation) {
@@ -135,7 +121,7 @@ class Room {
 
     }
 
-    addTicketToProject(project_id, ticket_title, col) {
+    addTicketToProject(project_id, ticket_title, col, done) {
         const post_it_note_colours = ['#ff7eb9', '#ff65a3', '#7afcff', '#feff9c', '#fff740'];
         const start_position_x = -0.8;
         const start_position_y = 6;
@@ -183,6 +169,12 @@ class Room {
 
         ticket.appendChild(text);
 
+        if (done) {
+            const redx = document.createElement('a-image');
+            redx.setAttribute('src', '#x');
+            ticket.appendChild(redx);
+        }
+
         //text.setAttribute("value", 'value: ' + ticket_title + '; width: 1; color: #000');
         whiteboard.model.appendChild(ticket); 
         whiteboard.tickets[col].push(ticket);
@@ -195,17 +187,17 @@ class Room {
 }
 
 function renderProjectBoard (room, data) {
-    data.columns.forEach((col) => {
+    data.columns.forEach((col, i) => {
         room.addColumnToProject(1, col.name);
         request(window.location + 'column/' + col.id + '/cards', (err, res, body) => {
-            JSON.parse(body).cards.forEach((card, i) => {
+            JSON.parse(body).cards.forEach(function (card) {
                 let issue = card.content_url.split('/');
                 let issue_id = issue[issue.length-1];
 
-                request(window.location + 'issue/' + issue_id, function(err, res, body) {
+                request(window.location + 'issue/' + issue_id, (err, res, body) => {
                     let b = JSON.parse(body);
-                    console.log(b);
-                    room.addTicketToProject(1, b.issue.title, i);
+                    console.log(b.issue);
+                    room.addTicketToProject(1, b.issue.title, i, b.issue.state==='closed');
                 });
             });
         });
