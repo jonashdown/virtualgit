@@ -5,6 +5,7 @@ class Room {
         this.walls = [];
         this.whiteboards = {};
         this.scene = document.createElement('a-scene');
+        this.scene.setAttribute('position', '0 -2.5 0');
 
         this.assets = document.createElement('a-assets');
         this.scene.appendChild(this.assets);
@@ -15,7 +16,7 @@ class Room {
         this.addModel('images/sofa/scene.gltf', 'sofa');
         
         this.camera = document.createElement('a-entity');
-        this.camera.setAttribute('position', '0 4 15');
+        this.camera.setAttribute('position', '0 -4 -4');
         this.camera.appendChild(document.createElement('a-camera'));
         this.scene.appendChild(this.camera);
         
@@ -23,27 +24,27 @@ class Room {
         sky.setAttribute('color', '#666');
         this.scene.appendChild(sky);
         
-        this.addWall('-25 0 -4', '180 -90 0');
-        this.addWall('25 0 -4', '0 -90 0');
-        this.addWall('0 0 21', '0 180 0');
-        this.addWall('0 0 -29', '0 0 0');
+        this.addWall('-3 -2.5 -4', '180 -90 0');
+        this.addWall('3 -2.5 -4', '0 -90 0');
+        this.addWall('0 -2.5 -1', '0 180 0');
+        this.addWall('0 -2.5 -7', '0 0 0');
 
         const plane = document.createElement('a-plane');
         plane.setAttribute('position', '0 -5.5 -4');
         plane.setAttribute('rotation', '-90 0 0');
-        plane.setAttribute('width', '50');
-        plane.setAttribute('height', '50');
+        plane.setAttribute('width', '6');
+        plane.setAttribute('height', '6');
         plane.setAttribute('color', '#fff');
         plane.setAttribute('src', '#wood');
         plane.setAttribute('repeat', '20 20');
         this.scene.appendChild(plane);
 
-        const sofa = document.createElement('a-entity');
-        sofa.setAttribute('gltf-model', 'url(images/sofa/scene.gltf)');
-        sofa.setAttribute('scale', '0.007 0.007 0.007');
-        sofa.setAttribute('position', '15.7 -5.5 -33');
-        sofa.setAttribute('rotation', '0 180 0');
-        this.scene.appendChild(sofa);
+        //const sofa = document.createElement('a-entity');
+        //sofa.setAttribute('gltf-model', 'url(images/sofa/scene.gltf)');
+        //sofa.setAttribute('scale', '0.007 0.007 0.007');
+        //sofa.setAttribute('position', '15.7 -5.5 -33');
+        //sofa.setAttribute('rotation', '0 180 0');
+        //this.scene.appendChild(sofa);
 
         this.addProjectBoard(123);
         this.addTicketToProject(123, 'test');
@@ -57,8 +58,8 @@ class Room {
         const wall = document.createElement('a-plane');
         wall.setAttribute('position', position);
         wall.setAttribute('rotation', rotation);
-        wall.setAttribute('width', '50');
-        wall.setAttribute('height', '50');
+        wall.setAttribute('width', '6');
+        wall.setAttribute('height', '6');
         wall.setAttribute('color', '#fff');
         wall.setAttribute('src', '#wallpaper');
         wall.setAttribute('repeat', '20 20');
@@ -92,6 +93,8 @@ class Room {
         const whiteboard = document.createElement('a-entity');
         whiteboard.setAttribute('gltf-model', 'url(images/whiteboard/scene.gltf)');
         whiteboard.setAttribute('id', 'project-' + project_id);
+        whiteboard.setAttribute('scale', '0.25 0.25 0.25');
+        whiteboard.setAttribute('position', '0 -4 -5');
         this.scene.appendChild(whiteboard);
 
         this.whiteboards[project_id] = {
