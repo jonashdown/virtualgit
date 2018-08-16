@@ -47,11 +47,24 @@ class Room {
         //this.scene.appendChild(sofa);
 
         this.addProjectBoard(123);
-        this.addTicketToProject(123, 'test');
-        this.addTicketToProject(123, 'test2');
-        this.addTicketToProject(123, 'test3');
-        this.addTicketToProject(123, 'test4');
-        this.addTicketToProject(123, 'test5');
+        this.addTicketToProject(123, 'test', 0);
+        this.addTicketToProject(123, 'test2', 0);
+        this.addTicketToProject(123, 'test2', 0);
+        this.addTicketToProject(123, 'test2', 0);
+        this.addTicketToProject(123, 'test2', 0);
+        this.addTicketToProject(123, 'test3', 1);
+        this.addTicketToProject(123, 'test3', 1);
+        this.addTicketToProject(123, 'test3', 1);
+        this.addTicketToProject(123, 'test3', 1);
+        this.addTicketToProject(123, 'test4', 2);
+        this.addTicketToProject(123, 'test5', 2);
+        this.addTicketToProject(123, 'test6', 2);
+        this.addTicketToProject(123, 'test6', 2);
+        this.addTicketToProject(123, 'test6', 2);
+        this.addTicketToProject(123, 'test7', 2);
+        this.addColumnToProject(123, 'TEST COL');
+        this.addColumnToProject(123, 'TEST COL1');
+        this.addColumnToProject(123, 'TEST COL2');
     }
 
     addWall(position, rotation) {
@@ -99,15 +112,38 @@ class Room {
 
         this.whiteboards[project_id] = {
             model: whiteboard,
-            tickets: []
+            tickets: [[],[],[]],
+            columns: []
         }
     }
 
-    addTicketToProject(project_id, ticket_title) {
+    addColumnToProject(project_id, column_title) {
+        const start_position_x = -0.8;
+        const width_of_board = 8;
+        const y = 6.9;
+        const d = -0.15; 
+
+        let whiteboard = this.whiteboards[project_id];
+
+        const x = start_position_x + ((width_of_board/3)*whiteboard.columns.length);
+
+        const column = document.createElement('a-text');
+        column.setAttribute('value', column_title);
+        column.setAttribute('position', [x, y, d].join(' '));
+        column.setAttribute('color', '#000');
+
+        whiteboard.model.appendChild(column);
+
+        whiteboard.columns.push(column);
+
+    }
+
+    addTicketToProject(project_id, ticket_title, col) {
         const post_it_note_colours = ['#ff7eb9', '#ff65a3', '#7afcff', '#feff9c', '#fff740'];
         const start_position_x = -0.8;
-        const start_position_y = 6.6;
+        const start_position_y = 6;
         const start_position_d = -0.15; 
+        const width_of_board = 8;
 
         const ticket_width = 1;
         const ticket_height = 1;
@@ -116,21 +152,43 @@ class Room {
         const ticket = document.createElement('a-entity');
 
         ticket.setAttribute('geometry', "primitive: plane; width: "+ticket_width+"; height: "+ticket_height);
+        ticket.setAttribute('click-drag', true);
 
-        const offset = Math.random()*0.1;
+        
+        //how many lines do we have?
+        const num_of_tickets = whiteboard.tickets[col].length;
+        const total_width = num_of_tickets * ticket_width;
+        const offset_height = Math.random()*0.1;
+        const total_lines = Math.ceil(total_width / (width_of_board/3));
+        const y = start_position_y - (total_lines*(ticket_height + 0.1)) - offset_height;
+        
+        const offset_width = Math.random()*0.1;
+        const col_pos = width_of_board/3 * col;
+        const tickets_per_row = (width_of_board/3)/ticket_width;
+        const offset_to_remove = Math.floor(total_lines*(tickets_per_row-1)*ticket_width);
+        const x = start_position_x + ((ticket_width + 0.1) * whiteboard.tickets[col].length) - offset_width + col_pos - offset_to_remove;
+        
         const rotate = this.random(-10, 10);
-        const x = start_position_x + ((ticket_width + 0.1) * whiteboard.tickets.length) - offset;
-        const y = start_position_y;
         const d = start_position_d;
 
         ticket.setAttribute('position', x + " " + y + " " + d);
         ticket.setAttribute('rotation', '0 0 ' + rotate);
 
         ticket.setAttribute('material', 'color: ' + post_it_note_colours[Math.floor(Math.random() * post_it_note_colours.length)]); 
-        ticket.setAttribute("text", 'value: ' + ticket_title + '; width: 1; color: #000');
-        ticket.setAttribute('id', 'ticket-' + whiteboard.tickets.length + '-' + project_id);
+        ticket.setAttribute('id', 'ticket-' + col + '-' + whiteboard.tickets[col].length + '-' + project_id);
+
+        const text = document.createElement('a-text');
+        text.setAttribute("value", ticket_title);
+        text.setAttribute("color", '#000');
+        text.setAttribute('align', 'center');
+        text.setAttribute('wrap-count', 7);
+        text.setAttribute('width', 1);
+
+        ticket.appendChild(text);
+
+        //text.setAttribute("value", 'value: ' + ticket_title + '; width: 1; color: #000');
         whiteboard.model.appendChild(ticket); 
-        whiteboard.tickets.push(ticket);
+        whiteboard.tickets[col].push(ticket);
     }
 
     random(min, max) {
